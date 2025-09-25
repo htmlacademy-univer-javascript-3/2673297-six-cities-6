@@ -27,7 +27,7 @@ jobs:
           echo "BUILD_URL=$(echo ${{ github.repository }} | sed -r 's/\//\.github\.io\//g')" >> $GITHUB_ENV
 
       - name: Deploy build to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-Pages-deploy-action@v4
         with:
           folder: dist
           clean: true
