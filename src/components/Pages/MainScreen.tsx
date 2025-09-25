@@ -1,11 +1,26 @@
 ﻿import { JSX } from 'react';
-import OfferCard from './offer-card';
+import OfferCard from '../OfferCard.tsx';
+import { OfferCards } from '../Const.ts';
 
 type MainScreenProps = {
-  cardCount: number;
+  offerCardCount: number;
 }
 
-function MainScreen({cardCount}: MainScreenProps): JSX.Element {
+function MainScreen({offerCardCount}: MainScreenProps): JSX.Element {
+  const cards = Array.from(Array(offerCardCount).keys())
+    .map((index) => OfferCards[index % OfferCards.length])
+    .map((place) => (
+      <OfferCard
+        key={place.name}
+        name={place.name}
+        type={place.type}
+        imageUrl={place.imageUrl}
+        price={place.price}
+        rating={place.rating}
+        isPremium={place.isPremium}
+        inBookmarks={place.inBookmarks}
+      />
+    ));
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -95,10 +110,7 @@ function MainScreen({cardCount}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                {Array.from({ length: cardCount }, (_, index) => (
-                  <OfferCard key={index} />
-                ))}
+              <div className="cities__places-list places__list tabs__content"> {cards}
               </div>
             </section>
             <div className="cities__right-section">
