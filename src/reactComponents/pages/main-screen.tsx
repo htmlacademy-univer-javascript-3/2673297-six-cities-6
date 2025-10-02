@@ -1,6 +1,6 @@
 ﻿import { JSX } from 'react';
-import OfferCard from '../OfferCard.tsx';
-import { OfferCards } from '../Const.ts';
+import OfferCard from '../offer-card.tsx';
+import { OfferCards } from '../const.ts';
 
 type MainScreenProps = {
   offerCardCount: number;
