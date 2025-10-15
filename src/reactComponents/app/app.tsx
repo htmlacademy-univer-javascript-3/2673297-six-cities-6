@@ -37,7 +37,7 @@ function App({offerCardCount}: AppScreenProps) : JSX.Element {
           <Route index element={<NotFoundScreen />} />
         </Route>
         <Route
-          path="*"
+          path={AppRoute.NotFound}
           element={<NotFoundScreen />}
         />
       </Routes>
