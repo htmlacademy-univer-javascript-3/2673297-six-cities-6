@@ -16,7 +16,7 @@ function ListOffers({offers} : OfferListProps) : JSX.Element {
   };
 
   return (
-    <div className="list-offers">
+    <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
         <div
           key={offer.id}

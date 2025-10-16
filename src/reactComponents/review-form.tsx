@@ -22,6 +22,10 @@ function ReviewForm() : JSX.Element {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     console.log('Form data:', formData);
+    setFormData({
+      rating: 0,
+      review: ''
+    });
   };
 
   const isSubmitDisabled = formData.rating === 0 || formData.review.length < 50;

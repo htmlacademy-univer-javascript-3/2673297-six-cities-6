@@ -1,4 +1,6 @@
-﻿export type Offer = {
+﻿import {review} from './review.ts';
+
+export type Offer = {
   name: string;
   type: string;
   imageUrl: string;
@@ -9,6 +11,7 @@
   bedrooms: number;
   maxAdults: number;
   goods: string[];
+  reviews: review[];
 };
 
 export type Offers = Offer[];
