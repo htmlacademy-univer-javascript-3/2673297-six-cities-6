@@ -1,7 +1,8 @@
-﻿import {review} from './review.ts';
+﻿import {Review} from './review.ts';
 import {Point} from './point.ts';
 
 export type Offer = {
+  city: string;
   name: string;
   type: string;
   imageUrl: string;
@@ -12,7 +13,7 @@ export type Offer = {
   bedrooms: number;
   maxAdults: number;
   goods: string[];
-  reviews: review[];
+  reviews: Review[];
   point: Point;
 };
 
