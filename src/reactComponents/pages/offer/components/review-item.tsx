@@ -5,13 +5,16 @@ export type ReviewItemProps = {
 }
 
 export function ReviewItem({ review }: ReviewItemProps) {
+  const date = review.date ? new Date(review.date) : new Date();
 
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-  };
+  const isValidDate = !isNaN(date.getTime());
 
-  const dateString = Date.parse(review.timestamp).toLocaleString('en', options);
+  const formattedDate = isValidDate
+    ? date.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric'
+    })
+    : 'Invalid date';
 
   return (
     <li className="reviews__item">
@@ -31,7 +34,7 @@ export function ReviewItem({ review }: ReviewItemProps) {
           </div>
         </div>
         <p className="reviews__text">{review.comment}</p>
-        <time className="reviews__time" dateTime="2019-04-24">{dateString}</time>
+        <time className="reviews__time" dateTime="2019-04-24">{formattedDate}</time>
       </div>
     </li>
   );

@@ -1,32 +1,117 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch} from '../../../../store';
+import {useParams} from 'react-router-dom';
+import {AppState} from '../../../../store/reducer.ts';
+import {AuthorizationStatus} from '../../../../types/auth-status.ts';
+import {postReviewAction} from '../../../../store/api-actions.ts';
 
 export function CommentForm() {
-  const [, setRating] = useState('1');
+  const [rating, setRating] = useState('0');
   const [comment, setComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { id: offerId } = useParams();
+
+  const authorizationStatus = useSelector<AppState, AuthorizationStatus>(
+    (state) => state.authorizationStatus
+  );
+
+  if (!offerId || authorizationStatus !== AuthorizationStatus.Auth) {
+    return null;
+  }
 
   function onCommentChanged(event: ChangeEvent<HTMLTextAreaElement>) {
     setComment(event.target.value);
+    setError('');
   }
 
   function onRatingChanged(event: ChangeEvent<HTMLInputElement>) {
     setRating(event.target.value);
+    setError('');
   }
 
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    setError('');
+
+    const numericRating = Number(rating);
+
+    if (numericRating === 0) {
+      setError('Please select a rating');
+      return;
+    }
+
+    if (comment.length < 50) {
+      setError('Review must be at least 50 characters');
+      return;
+    }
+
+    if (comment.length > 300) {
+      setError('Review must not exceed 300 characters');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    dispatch(postReviewAction({
+      offerId,
+      reviewData: {
+        comment,
+        rating: numericRating
+      }
+    }))
+      .unwrap()
+      .then(() => {
+        setRating('0');
+        setComment('');
+      })
+      .catch((err: Error) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
+
+  const isSubmitDisabled =
+    rating === '0' ||
+    comment.length < 50 ||
+    comment.length > 300 ||
+    isSubmitting;
+
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form className="reviews__form form" onSubmit={handleSubmit}>
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
-      <div
-        className="reviews__rating-form form__rating"
-        onChange={onRatingChanged}
-      >
+
+      {error && (
+        <div className="reviews__error" style={{
+          color: '#ff6d51',
+          backgroundColor: '#ffe8e1',
+          padding: '10px',
+          borderRadius: '4px',
+          marginBottom: '10px'
+        }}
+        >
+          {error}
+        </div>
+      )}
+
+      <div className="reviews__rating-form form__rating">
         <input
           className="form__rating-input visually-hidden"
           name="rating"
-          defaultValue={5}
+          value="5"
           id="5-stars"
           type="radio"
+          checked={rating === '5'}
+          onChange={onRatingChanged}
+          disabled={isSubmitting}
         />
         <label
           htmlFor="5-stars"
@@ -40,9 +125,12 @@ export function CommentForm() {
         <input
           className="form__rating-input visually-hidden"
           name="rating"
-          defaultValue={4}
+          value="4"
           id="4-stars"
           type="radio"
+          checked={rating === '4'}
+          onChange={onRatingChanged}
+          disabled={isSubmitting}
         />
         <label
           htmlFor="4-stars"
@@ -56,9 +144,12 @@ export function CommentForm() {
         <input
           className="form__rating-input visually-hidden"
           name="rating"
-          defaultValue={3}
+          value="3"
           id="3-stars"
           type="radio"
+          checked={rating === '3'}
+          onChange={onRatingChanged}
+          disabled={isSubmitting}
         />
         <label
           htmlFor="3-stars"
@@ -72,9 +163,12 @@ export function CommentForm() {
         <input
           className="form__rating-input visually-hidden"
           name="rating"
-          defaultValue={2}
+          value="2"
           id="2-stars"
           type="radio"
+          checked={rating === '2'}
+          onChange={onRatingChanged}
+          disabled={isSubmitting}
         />
         <label
           htmlFor="2-stars"
@@ -88,9 +182,12 @@ export function CommentForm() {
         <input
           className="form__rating-input visually-hidden"
           name="rating"
-          defaultValue={1}
+          value="1"
           id="1-star"
           type="radio"
+          checked={rating === '1'}
+          onChange={onRatingChanged}
+          disabled={isSubmitting}
         />
         <label
           htmlFor="1-star"
@@ -109,6 +206,8 @@ export function CommentForm() {
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={onCommentChanged}
         value={comment}
+        disabled={isSubmitting}
+        maxLength={300}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -120,9 +219,9 @@ export function CommentForm() {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled
+          disabled={isSubmitDisabled}
         >
-          Submit
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
       </div>
     </form>

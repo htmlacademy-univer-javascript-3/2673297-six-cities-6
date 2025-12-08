@@ -1,4 +1,3 @@
-
 import { CommentForm } from './comment-form';
 import { ReviewItem } from './review-item';
 import {Reviews} from '../../../../types/review.ts';

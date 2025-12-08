@@ -5,7 +5,7 @@ import axios, { AxiosInstance } from 'axios';
 import {setAuthorizationStatus, setOffers, setOffersLoadingStatus, setSelectedOffer, setSelectedOfferLoadingStatus, setUserData} from './action';
 import {APIRoute} from './api-route.ts';
 import {Offer, Offers} from '../types/offer.ts';
-import {Reviews} from '../types/review.ts';
+import {Review, ReviewData, Reviews} from '../types/review.ts';
 import {OfferDetails} from '../types/offer-details.ts';
 import {AuthorizationStatus} from '../types/auth-status.ts';
 
@@ -48,18 +48,27 @@ export const fetchOfferDetailsAction = createAsyncThunk<void, string, {
   async (offerId: string, { dispatch, extra: api }) => {
     dispatch(setSelectedOfferLoadingStatus(true));
 
-    const offerData = await api.get<Offer>(APIRoute.OfferDetails.replace(':id', offerId));
-    const reviewsData = await api.get<Reviews>(APIRoute.OfferReviews.replace(':id', offerId));
-    const offersNearbyData = await api.get<Offers>(APIRoute.OffersNearby.replace(':id', offerId));
+    try {
+      const offerData = await api.get<Offer>(APIRoute.OfferDetails.replace(':id', offerId));
+      const reviewsData = await api.get<Reviews>(APIRoute.OfferReviews.replace(':id', offerId));
+      const offersNearbyData = await api.get<Offers>(APIRoute.OffersNearby.replace(':id', offerId));
 
-    const offerDetails: OfferDetails = {
-      offer: offerData.data,
-      reviews: reviewsData.data,
-      offersNearby: offersNearbyData.data,
-    };
+      const offerDetails: OfferDetails = {
+        offer: offerData.data,
+        reviews: reviewsData.data,
+        offersNearby: offersNearbyData.data,
+      };
 
-    dispatch(setSelectedOfferLoadingStatus(false));
-    dispatch(setSelectedOffer(offerDetails));
+      dispatch(setSelectedOfferLoadingStatus(false));
+      dispatch(setSelectedOffer(offerDetails));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        throw new Error('NOT_FOUND');
+      }
+      dispatch(setSelectedOffer(undefined));
+    } finally {
+      dispatch(setSelectedOfferLoadingStatus(false));
+    }
   },
 );
 
@@ -127,6 +136,35 @@ export const logoutAction = createAsyncThunk<void, undefined, {
       localStorage.removeItem('token');
       dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
       dispatch(setUserData(null));
+    }
+  }
+);
+
+export const postReviewAction = createAsyncThunk<Review, {offerId: string; reviewData: ReviewData}, {
+    dispatch: AppDispatch;
+    state: AppState;
+    extra: AxiosInstance;
+}>(
+  'offer/postReview',
+  async ({offerId, reviewData}, {dispatch, extra: api}) => {
+    try {
+      const {data} = await api.post<Review>(`/comments/${offerId}`, reviewData);
+      dispatch(fetchOfferDetailsAction(offerId));
+
+      return data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const { response } = error;
+
+        if (response && response.status === 400){
+          throw new Error('Invalid review data');
+        }
+        if (response && response.status === 401){
+          throw new Error('Please login to post a review');
+        }
+      }
+
+      throw error;
     }
   }
 );

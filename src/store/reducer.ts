@@ -1,10 +1,20 @@
 ﻿import { createReducer } from '@reduxjs/toolkit';
-import {selectCity, selectSorting, setAuthorizationStatus, setOffers, setOffersLoadingStatus, setSelectedOffer, setSelectedOfferLoadingStatus, setUserData} from './action';
+import {
+  selectCity,
+  selectSorting,
+  setAuthorizationStatus,
+  setOffers,
+  setOffersLoadingStatus, setReviews,
+  setSelectedOffer,
+  setSelectedOfferLoadingStatus,
+  setUserData
+} from './action';
 import {Offers} from '../types/offer.ts';
 import {SortType} from '../types/sort-type.ts';
 import {OfferDetails} from '../types/offer-details.ts';
 import {AuthorizationStatus} from '../types/auth-status.ts';
 import {User} from '../types/user.ts';
+import {Reviews} from '../types/review.ts';
 
 
 export type AppState = {
@@ -17,6 +27,7 @@ export type AppState = {
   isSelectedOfferLoading: boolean;
   authorizationStatus: AuthorizationStatus;
   user: User | null;
+  reviews: Reviews;
 }
 
 const initialState: AppState = {
@@ -36,6 +47,7 @@ const initialState: AppState = {
   isSelectedOfferLoading: false,
   authorizationStatus: AuthorizationStatus.Unknown,
   user: null,
+  reviews: []
 };
 
 export const reducer = createReducer<AppState>(initialState, (builder) => {
@@ -63,6 +75,9 @@ export const reducer = createReducer<AppState>(initialState, (builder) => {
     })
     .addCase(setUserData, (state, action) => {
       state.user = action.payload;
+    })
+    .addCase(setReviews, (state, action) => {
+      state.reviews = action.payload;
     });
 });
 

@@ -1,6 +1,6 @@
 ﻿import {fetchOfferDetailsAction} from '../../../store/api-actions.ts';
 import {useDispatch, useSelector} from 'react-redux';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {AppState} from '../../../store/reducer.ts';
 import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 import NotFoundScreen from '../not-found/not-found-screen.tsx';
@@ -14,11 +14,12 @@ import {GoodsList} from './components/goods-list.tsx';
 import {ReviewList} from './components/review-list.tsx';
 import {OfferList} from '../../components/offer-list.tsx';
 import Map from '../main/components/map.tsx';
+import {AppRoute} from '../../const.ts';
 
 
 function OfferScreen() : JSX.Element {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const reviews = useSelector<AppState, Reviews>((state) => state.selectedOffer?.reviews ?? []);
   const offersNearby = useSelector<AppState, Offers>((state) => state.selectedOffer?.offersNearby ?? []);
   const offer = useSelector<AppState, Offer | undefined>((state) => state?.selectedOffer?.offer);
@@ -27,7 +28,12 @@ function OfferScreen() : JSX.Element {
 
   useEffect(() => {
     if (id !== undefined) {
-      dispatch(fetchOfferDetailsAction(id));
+      dispatch(fetchOfferDetailsAction(id))
+        .catch((error: unknown) => {
+          if (error instanceof Error && error.message === 'NOT_FOUND') {
+            navigate(AppRoute.NotFound);
+          }
+        });
     }
   }, [dispatch, id]);
 
