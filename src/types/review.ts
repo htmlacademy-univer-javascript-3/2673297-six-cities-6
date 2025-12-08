@@ -1,11 +1,18 @@
-﻿import { User } from './user';
-
-export type Review = {
+﻿export type Review = {
   id: string;
+  date: string;
+  user: {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
   comment: string;
-  user: User;
-  timestamp: string;
   rating: number;
-}
+};
 
 export type Reviews = Review[];
+
+export type ReviewData = {
+  comment: string;
+  rating: number;
+};
