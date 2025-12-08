@@ -1,5 +1,5 @@
 ﻿import Map from './components/map';
-import {LoadingScreen} from './components/loading-screen.tsx';
+import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 import {JSX, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppState} from '../../../store/reducer.ts';
@@ -7,10 +7,10 @@ import {SortType} from '../../../types/sort-type.ts';
 import {Offer} from '../../../types/offer.ts';
 import {AppDispatch} from '../../../store';
 import {selectCity, selectSorting} from '../../../store/action.ts';
-import {AppNavBar} from '../../components/app-navbar.tsx';
 import {CityHeader} from './components/city-header.tsx';
 import {SortOptions} from './components/sort-options.tsx';
 import {OfferList} from '../../components/offer-list.tsx';
+import {AppNavBar} from '../../components/app-navbar.tsx';
 
 
 function MainScreen(): JSX.Element {
