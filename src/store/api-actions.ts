@@ -1,12 +1,26 @@
 ﻿import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch } from '.';
 import { AppState } from './reducer';
-import { AxiosInstance } from 'axios';
-import { setOffers, setOffersLoadingStatus, setSelectedOffer, setSelectedOfferLoadingStatus } from './action';
+import axios, { AxiosInstance } from 'axios';
+import {setAuthorizationStatus, setOffers, setOffersLoadingStatus, setSelectedOffer, setSelectedOfferLoadingStatus, setUserData} from './action';
 import {APIRoute} from './api-route.ts';
 import {Offer, Offers} from '../types/offer.ts';
 import {Reviews} from '../types/review.ts';
 import {OfferDetails} from '../types/offer-details.ts';
+import {AuthorizationStatus} from '../types/auth-status.ts';
+
+type AuthInfo = {
+    email: string;
+    name: string;
+    avatarUrl: string;
+    token: string;
+    isPro: boolean;
+};
+
+type LoginData = {
+    email: string;
+    password: string;
+};
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -48,3 +62,72 @@ export const fetchOfferDetailsAction = createAsyncThunk<void, string, {
     dispatch(setSelectedOffer(offerDetails));
   },
 );
+
+export const checkAuthAction = createAsyncThunk<void, undefined, {
+    dispatch: AppDispatch;
+    state: AppState;
+    extra: AxiosInstance;
+}>(
+  'auth/checkAuth',
+  async (_arg, {dispatch, extra: api}) => {
+    try {
+      const {data} = await api.get<AuthInfo>('/login');
+      dispatch(setAuthorizationStatus(AuthorizationStatus.Auth));
+      dispatch(setUserData(data));
+
+      localStorage.setItem('token', data.token);
+    } catch {
+      dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
+      dispatch(setUserData(null));
+    }
+  },
+);
+
+export const loginAction = createAsyncThunk<AuthInfo, LoginData, {
+    dispatch: AppDispatch;
+    state: AppState;
+    extra: AxiosInstance;
+}>(
+  'auth/login',
+  async ({email, password}, {dispatch, extra: api}) => {
+    try {
+      const {data} = await api.post<AuthInfo>('/login', {email, password});
+
+      localStorage.setItem('token', data.token);
+
+      dispatch(setAuthorizationStatus(AuthorizationStatus.Auth));
+      dispatch(setUserData(data));
+
+      return data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const { response } = error;
+
+        if (response && (response.status === 400 || response.status === 401)) {
+          const message = 'Invalid email or password';
+          throw new Error(message);
+        }
+      }
+
+      throw error;
+    }
+  }
+);
+
+export const logoutAction = createAsyncThunk<void, undefined, {
+    dispatch: AppDispatch;
+    state: AppState;
+    extra: AxiosInstance;
+}>(
+  'auth/logout',
+  async (_arg, {dispatch, extra: api}) => {
+    try {
+      await api.delete('/logout');
+    } finally {
+      localStorage.removeItem('token');
+      dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
+      dispatch(setUserData(null));
+    }
+  }
+);
+

@@ -2,7 +2,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {AppState} from '../../../store/reducer.ts';
-import {LoadingScreen} from '../main/components/loading-screen.tsx';
+import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 import NotFoundScreen from '../not-found/not-found-screen.tsx';
 import {AppNavBar} from '../../components/app-navbar.tsx';
 import {AppDispatch} from '../../../store';
