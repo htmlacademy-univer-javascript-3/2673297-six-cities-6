@@ -1,20 +1,25 @@
-﻿import {Review} from './review.ts';
-import {Point} from './point.ts';
+﻿import { City } from './city';
+import { Location } from './location';
+import { OfferType } from './offer-type';
+import { User } from './user';
 
 export type Offer = {
-  city: string;
-  name: string;
-  type: string;
-  imageUrl: string;
+  id: string;
+  title: string;
+  type: OfferType;
   price: number;
-  rating: number;
+  city: City;
+  location: Location;
+  description: string;
+  isFavorite: boolean;
   isPremium: boolean;
-  id: number;
+  rating: number;
   bedrooms: number;
   maxAdults: number;
+  host: User;
   goods: string[];
-  reviews: Review[];
-  point: Point;
-};
+  previewImage: string;
+  images: string[];
+}
 
 export type Offers = Offer[];
