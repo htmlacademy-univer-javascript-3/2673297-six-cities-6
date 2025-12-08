@@ -1,4 +1,22 @@
-﻿import {configureStore} from '@reduxjs/toolkit';
-import {reducer} from './reducer';
+﻿import { configureStore } from '@reduxjs/toolkit';
+import { reducer } from './reducer';
+import { fetchOffersAction } from './api-actions';
+import {createAPI} from '../api/api.ts';
 
-export const store = configureStore({reducer});
+export const api = createAPI();
+
+export const appStateStore = configureStore(
+  {
+    reducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        thunk: {
+          extraArgument: api,
+        },
+      }),
+  },
+);
+
+appStateStore.dispatch(fetchOffersAction());
+
+export type AppDispatch = typeof appStateStore.dispatch;

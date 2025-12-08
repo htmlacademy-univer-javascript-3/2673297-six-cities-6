@@ -1,11 +1,11 @@
-﻿import {User} from './user.ts';
+﻿import { User } from './user';
 
 export type Review = {
-  id: number;
-  date: string;
-  rating: number;
-  user: User;
+  id: string;
   comment: string;
+  user: User;
+  timestamp: string;
+  rating: number;
 }
 
 export type Reviews = Review[];

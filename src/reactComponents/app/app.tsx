@@ -1,48 +1,33 @@
-﻿import {JSX} from 'react';
-import MainScreen from '../pages/main-screen.tsx';
-import {BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
-import LoginScreen from '../pages/login-screen.tsx';
-import OfferScreen from '../pages/offer-screen.tsx';
-import NotFoundScreen from '../pages/not-found-screen.tsx';
+﻿import {Provider} from 'react-redux';
+import {AppRoute} from '../const.ts';
+import {appStateStore} from '../../store';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import LoginScreen from '../pages/login/login-screen.tsx';
+import MainScreen from '../pages/main/main-screen.tsx';
+import OfferScreen from '../pages/offer/offer-screen.tsx';
 import PrivateRoute from '../private-root/private-root.tsx';
-import {AppRoute, AuthorizationStatus} from '../const.ts';
-import FavoritesScreen from '../pages/favorites-screen.tsx';
-import {Offers} from '../../types/offer';
+import FavoritesScreen from '../pages/favorites/favorites-screen.tsx';
+import NotFoundScreen from '../pages/not-found/not-found-screen.tsx';
 
-type AppScreenProps = {
-  offers: Offers;
-}
-
-function App({offers}: AppScreenProps) : JSX.Element {
+function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path={AppRoute.Main}
-          element={<MainScreen/>}
-        />
-        <Route
-          path={AppRoute.Login}
-          element={<LoginScreen />}
-        />
-        <Route
-          path={AppRoute.Favorites}
-          element={
-            <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
-              <FavoritesScreen favorites={offers}/>
-            </PrivateRoute>
-          }
-        />
-        <Route path={AppRoute.Offer} element={<Outlet />}>
-          <Route path=':id' element={<OfferScreen offers={offers} />} />
-          <Route index element={<NotFoundScreen />} />
-        </Route>
-        <Route
-          path={AppRoute.NotFound}
-          element={<NotFoundScreen />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <Provider store={appStateStore}>
+      <BrowserRouter>
+        <Routes>
+          <Route path={AppRoute.Login} element={<LoginScreen />} />
+          <Route path={AppRoute.Main} element={<MainScreen />} />
+          <Route path={AppRoute.Offer} element={<OfferScreen />} />
+          <Route path={AppRoute.Favorites}
+            element={
+              <PrivateRoute isAuthenticated={false}>
+                <FavoritesScreen offers={[]} />
+              </PrivateRoute>
+            }
+          />
+          <Route path='*' element={<NotFoundScreen />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
