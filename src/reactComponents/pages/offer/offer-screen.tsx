@@ -1,11 +1,10 @@
 ﻿import {fetchOfferDetailsAction} from '../../../store/api-actions.ts';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useParams} from 'react-router-dom';
-import {AppState} from '../../../store/reducer.ts';
 import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 import NotFoundScreen from '../not-found/not-found-screen.tsx';
 import {AppNavBar} from '../../components/app-navbar.tsx';
-import {AppDispatch} from '../../../store';
+import {AppDispatch, RootState} from '../../../store';
 import {Reviews} from '../../../types/review.ts';
 import {Offer, Offers} from '../../../types/offer.ts';
 import {JSX, useEffect} from 'react';
@@ -14,16 +13,16 @@ import {GoodsList} from './components/goods-list.tsx';
 import {ReviewList} from './components/review-list.tsx';
 import {OfferList} from '../../components/offer-list.tsx';
 import Map from '../main/components/map.tsx';
-import {AppRoute} from '../../const.ts';
+import {AppRoute} from '../../../const.ts';
 
 
 function OfferScreen() : JSX.Element {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const reviews = useSelector<AppState, Reviews>((state) => state.selectedOffer?.reviews ?? []);
-  const offersNearby = useSelector<AppState, Offers>((state) => state.selectedOffer?.offersNearby ?? []);
-  const offer = useSelector<AppState, Offer | undefined>((state) => state?.selectedOffer?.offer);
-  const isOfferLoading = useSelector<AppState, boolean>((state) => state?.isSelectedOfferLoading);
+  const reviews = useSelector<RootState, Reviews>((state) => state.selectedOffer?.selectedOffer?.reviews ?? []);
+  const offersNearby = useSelector<RootState, Offers>((state) => state.selectedOffer?.selectedOffer?.offersNearby ?? []);
+  const offer = useSelector<RootState, Offer | undefined>((state) => state?.selectedOffer?.selectedOffer?.offer);
+  const isOfferLoading = useSelector<RootState, boolean>((state) => state?.selectedOffer.isSelectedOfferLoading);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -35,7 +34,7 @@ function OfferScreen() : JSX.Element {
           }
         });
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, navigate]);
 
   if (isOfferLoading) {
     return <LoadingScreen />;

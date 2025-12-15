@@ -4,7 +4,7 @@ import {Offers} from '../../../../types/offer.ts';
 import {City} from '../../../../types/city.ts';
 import useMap from '../../../hooks/useMap.ts';
 import 'leaflet/dist/leaflet.css';
-import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../../const.ts';
+import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../../../const.ts';
 
 export type MapProps = {
   city: City;
@@ -63,7 +63,7 @@ function Map({ city, offers, activeOfferId, className }: MapProps) {
         markerLayerRef.current.remove();
       }
     };
-  }, [map, offers, city, activeOfferId]);
+  }, [map, offers, city, activeOfferId, currentCustomIcon, defaultCustomIcon]);
 
   return (
     <div

@@ -1,13 +1,14 @@
 ﻿import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AppDispatch } from '.';
-import { AppState } from './reducer';
+import {AppDispatch, RootState} from '.';
 import axios, { AxiosInstance } from 'axios';
-import {setAuthorizationStatus, setOffers, setOffersLoadingStatus, setSelectedOffer, setSelectedOfferLoadingStatus, setUserData} from './action';
 import {APIRoute} from './api-route.ts';
 import {Offer, Offers} from '../types/offer.ts';
 import {Review, ReviewData, Reviews} from '../types/review.ts';
 import {OfferDetails} from '../types/offer-details.ts';
 import {AuthorizationStatus} from '../types/auth-status.ts';
+import {setOffers, setOffersLoadingStatus} from './offers/slice.ts';
+import {setSelectedOffer, setSelectedOfferLoadingStatus} from './selected-offer/slice.ts';
+import {setAuthorizationStatus, setUserData} from './user/slice.ts';
 
 type AuthInfo = {
     email: string;
@@ -24,7 +25,7 @@ type LoginData = {
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
-  state: AppState;
+  state: RootState;
   extra: AxiosInstance;
 }>(
   'data/fetchOffers',
@@ -41,7 +42,7 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
 
 export const fetchOfferDetailsAction = createAsyncThunk<void, string, {
   dispatch: AppDispatch;
-  state: AppState;
+  state: RootState;
   extra: AxiosInstance;
 }>(
   'data/fetchOfferDetails',
@@ -74,7 +75,7 @@ export const fetchOfferDetailsAction = createAsyncThunk<void, string, {
 
 export const checkAuthAction = createAsyncThunk<void, undefined, {
     dispatch: AppDispatch;
-    state: AppState;
+    state: RootState;
     extra: AxiosInstance;
 }>(
   'auth/checkAuth',
@@ -94,7 +95,7 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
 
 export const loginAction = createAsyncThunk<AuthInfo, LoginData, {
     dispatch: AppDispatch;
-    state: AppState;
+    state: RootState;
     extra: AxiosInstance;
 }>(
   'auth/login',
@@ -125,7 +126,7 @@ export const loginAction = createAsyncThunk<AuthInfo, LoginData, {
 
 export const logoutAction = createAsyncThunk<void, undefined, {
     dispatch: AppDispatch;
-    state: AppState;
+    state: RootState;
     extra: AxiosInstance;
 }>(
   'auth/logout',
@@ -142,7 +143,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
 
 export const postReviewAction = createAsyncThunk<Review, {offerId: string; reviewData: ReviewData}, {
     dispatch: AppDispatch;
-    state: AppState;
+    state: RootState;
     extra: AxiosInstance;
 }>(
   'offer/postReview',

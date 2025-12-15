@@ -1,7 +1,7 @@
-import {AppRoute} from '../const.ts';
-import {Offer} from '../../types/offer.ts';
-import {Link} from 'react-router-dom';
-
+import { AppRoute } from '../../const.ts';
+import { Offer } from '../../types/offer.ts';
+import { Link } from 'react-router-dom';
+import React, { useCallback, useMemo } from 'react';
 
 export type OfferItemProps = {
   offer: Offer;
@@ -9,26 +9,55 @@ export type OfferItemProps = {
   onMouseLeave: (id: string) => void;
 }
 
-export function OfferItem({ offer, onMouseEnter, onMouseLeave }: OfferItemProps) {
-  const bookmarkedClassName = offer.isFavorite && 'place-card__bookmark-button--active';
+function OfferItemComponent({
+  offer,
+  onMouseEnter,
+  onMouseLeave
+}: OfferItemProps) {
 
-  const link = AppRoute.Offer.replace(':id', offer.id);
+  const handleMouseEnter = useCallback(() => {
+    onMouseEnter(offer.id);
+  }, [onMouseEnter, offer.id]);
+
+  const handleMouseLeave = useCallback(() => {
+    onMouseLeave(offer.id);
+  }, [onMouseLeave, offer.id]);
+
+  const bookmarkedClassName = useMemo(() =>
+    offer.isFavorite ? 'place-card__bookmark-button--active' : '',
+  [offer.isFavorite]
+  );
+
+  const link = useMemo(() =>
+    AppRoute.Offer.replace(':id', offer.id),
+  [offer.id]
+  );
+
+  const ratingWidth = useMemo(() =>
+    `${Math.floor(offer.rating) * 20}%`,
+  [offer.rating]
+  );
 
   return (
     <article
       className="cities__card place-card"
-      onMouseEnter={() => onMouseEnter(offer.id)}
-      onMouseLeave={() => onMouseLeave(offer.id)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      {
-        offer.isPremium &&
+      {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
-      }
+      )}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={link} >
-          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image" />
+        <Link to={link}>
+          <img
+            className="place-card__image"
+            src={offer.previewImage}
+            width="260"
+            height="200"
+            alt="Place image"
+          />
         </Link>
       </div>
       <div className="place-card__info">
@@ -49,7 +78,7 @@ export function OfferItem({ offer, onMouseEnter, onMouseLeave }: OfferItemProps)
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${Math.floor(offer.rating) * 20}%` }}></span>
+            <span style={{ width: ratingWidth }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -61,3 +90,5 @@ export function OfferItem({ offer, onMouseEnter, onMouseLeave }: OfferItemProps)
     </article>
   );
 }
+
+export const OfferItem = React.memo(OfferItemComponent);
