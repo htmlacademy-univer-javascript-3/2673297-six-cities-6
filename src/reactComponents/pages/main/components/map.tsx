@@ -63,7 +63,7 @@ function Map({ city, offers, activeOfferId, className }: MapProps) {
         markerLayerRef.current.remove();
       }
     };
-  }, [map, offers, city, activeOfferId]);
+  }, [map, offers, city, activeOfferId, currentCustomIcon, defaultCustomIcon]);
 
   return (
     <div

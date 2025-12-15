@@ -1,7 +1,7 @@
 ﻿import { createSlice } from '@reduxjs/toolkit';
 import { Offers } from '../../types/offer';
 import { SortType } from '../../types/sort-type';
-import {NameSpace} from "../../const.ts";
+import {NameSpace} from '../../const.ts';
 
 export interface OffersState {
   offers: Offers;

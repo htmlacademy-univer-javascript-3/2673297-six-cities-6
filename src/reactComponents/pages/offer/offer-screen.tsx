@@ -34,7 +34,7 @@ function OfferScreen() : JSX.Element {
           }
         });
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, navigate]);
 
   if (isOfferLoading) {
     return <LoadingScreen />;
