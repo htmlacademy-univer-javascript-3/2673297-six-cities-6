@@ -1,11 +1,10 @@
 ﻿import {JSX, FormEvent, useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {AppDispatch} from '../../../store';
-import {AppState} from '../../../store/reducer';
+import {AppDispatch, RootState} from '../../../store';
 import {loginAction} from '../../../store/api-actions';
 import {AuthorizationStatus} from '../../../types/auth-status.ts';
-import {AppRoute} from '../../const.ts';
+import {AppRoute} from '../../../const.ts';
 import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 
 function LoginScreen() : JSX.Element {
@@ -15,8 +14,8 @@ function LoginScreen() : JSX.Element {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const authorizationStatus = useSelector<AppState, AuthorizationStatus>(
-    (state) => state.authorizationStatus
+  const authorizationStatus = useSelector<RootState, AuthorizationStatus>(
+    (state) => state.user.authorizationStatus
   );
 
   useEffect(() => {

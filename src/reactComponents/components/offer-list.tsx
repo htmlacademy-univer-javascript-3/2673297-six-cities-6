@@ -1,6 +1,6 @@
-
 import { OfferItem } from './offer-item';
 import {Offers} from '../../types/offer.ts';
+import React, {useCallback} from 'react';
 
 export type OfferListProps = {
   offers: Offers;
@@ -9,7 +9,14 @@ export type OfferListProps = {
   onMouseLeave?: (id: string) => void;
 }
 
-export function OfferList({ offers, className, onMouseEnter, onMouseLeave }: OfferListProps) {
+function OfferListComponent({ offers, className, onMouseEnter, onMouseLeave }: OfferListProps) {
+  const handleMouseEnter = useCallback((id: string) => {
+    onMouseEnter?.(id);
+  }, [onMouseEnter]);
+
+  const handleMouseLeave = useCallback((id: string) => {
+    onMouseLeave?.(id);
+  }, [onMouseLeave]);
   return (
     <div className={className}>
       {
@@ -18,11 +25,13 @@ export function OfferList({ offers, className, onMouseEnter, onMouseLeave }: Off
             <OfferItem
               key={offer.id}
               offer={offer}
-              onMouseEnter={(id) => onMouseEnter?.(id)}
-              onMouseLeave={(id) => onMouseLeave?.(id)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             />)
           )
       }
     </div>
   );
 }
+
+export const OfferList = React.memo(OfferListComponent);

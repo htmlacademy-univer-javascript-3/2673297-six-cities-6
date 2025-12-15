@@ -1,7 +1,6 @@
-import {AppRoute} from '../const.ts';
+import {AppRoute} from '../../const.ts';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppState} from '../../store/reducer';
-import {AppDispatch} from '../../store';
+import {AppDispatch, RootState} from '../../store';
 import {logoutAction} from '../../store/api-actions';
 import {AuthorizationStatus} from '../../types/auth-status.ts';
 import {User} from '../../types/user.ts';
@@ -13,11 +12,11 @@ export type AppNavBarProps = {
 
 export function AppNavBar({ isActive }: AppNavBarProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const authorizationStatus = useSelector<AppState, AuthorizationStatus>(
-    (state) => state.authorizationStatus
+  const authorizationStatus = useSelector<RootState, AuthorizationStatus>(
+    (state) => state.user.authorizationStatus
   );
-  const userData = useSelector<AppState, User | null>(
-    (state) => state.user
+  const userData = useSelector<RootState, User | null>(
+    (state) => state.user.user
   );
 
   const handleLogoutClick = (e: React.MouseEvent) => {

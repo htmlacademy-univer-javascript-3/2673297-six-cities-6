@@ -2,7 +2,7 @@
 import {Provider} from 'react-redux';
 import {appStateStore} from '../../store';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {AppRoute} from '../const.ts';
+import {AppRoute} from '../../const.ts';
 import LoginScreen from '../pages/login/login-screen.tsx';
 import PrivateRoute from '../private-root/private-root.tsx';
 import OfferScreen from '../pages/offer/offer-screen.tsx';

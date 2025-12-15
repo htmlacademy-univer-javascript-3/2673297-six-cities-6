@@ -1,8 +1,7 @@
 import {ChangeEvent, FormEvent, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch} from '../../../../store';
+import {AppDispatch, RootState} from '../../../../store';
 import {useParams} from 'react-router-dom';
-import {AppState} from '../../../../store/reducer.ts';
 import {AuthorizationStatus} from '../../../../types/auth-status.ts';
 import {postReviewAction} from '../../../../store/api-actions.ts';
 
@@ -16,8 +15,8 @@ export function CommentForm() {
 
   const { id: offerId } = useParams();
 
-  const authorizationStatus = useSelector<AppState, AuthorizationStatus>(
-    (state) => state.authorizationStatus
+  const authorizationStatus = useSelector<RootState, AuthorizationStatus>(
+    (state) => state.user.authorizationStatus
   );
 
   if (!offerId || authorizationStatus !== AuthorizationStatus.Auth) {
