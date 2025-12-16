@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {SortType} from '../../../../types/sort-type.ts';
+import {SortType} from '../types/sort-type.ts';
 
 export type SortOptionsProps = {
   sortType: SortType;

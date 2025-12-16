@@ -1,10 +1,10 @@
-import {AppRoute} from '../../const.ts';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../store';
-import {logoutAction} from '../../store/api-actions';
-import {AuthorizationStatus} from '../../types/auth-status.ts';
-import {User} from '../../types/user.ts';
 import React from 'react';
+import {AppDispatch, RootState} from '../store';
+import {AuthorizationStatus} from '../types/auth-status.ts';
+import {User} from '../types/user.ts';
+import {logoutAction} from '../store/api-actions.ts';
+import {AppRoute} from '../const.ts';
 
 export type AppNavBarProps = {
   isActive: boolean;

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import {Offer} from '../../../../types/offer.ts';
-import {AppRoute} from '../../../../const.ts';
+import {AppRoute} from '../const.ts';
+import {Offer} from '../types/offer.ts';
 
 export type FavoriteCardProps = {
   offer: Offer;

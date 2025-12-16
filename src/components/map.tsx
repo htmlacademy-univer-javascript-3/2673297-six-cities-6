@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import leaflet from 'leaflet';
-import {Offers} from '../../../../types/offer.ts';
-import {City} from '../../../../types/city.ts';
-import useMap from '../../../hooks/useMap.ts';
+import useMap from '../hooks/useMap.ts';
 import 'leaflet/dist/leaflet.css';
-import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../../../const.ts';
+import {City} from '../types/city.ts';
+import {Offers} from '../types/offer.ts';
+import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../const.ts';
 
 export type MapProps = {
   city: City;

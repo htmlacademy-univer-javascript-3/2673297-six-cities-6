@@ -1,6 +1,6 @@
 import { OfferItem } from './offer-item';
-import {Offers} from '../../types/offer.ts';
 import React, {useCallback} from 'react';
+import {Offers} from '../types/offer.ts';
 
 export type OfferListProps = {
   offers: Offers;

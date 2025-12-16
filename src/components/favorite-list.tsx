@@ -1,5 +1,5 @@
-import { FavoriteCard } from './favorite-card';
-import {Offers} from '../../../../types/offer.ts';
+import { FavoriteCard } from './favorite-card.tsx';
+import {Offers} from '../types/offer.ts';
 
 export type FavoriteListProps = {
   offers: Offers;

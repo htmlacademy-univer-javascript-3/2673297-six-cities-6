@@ -1,7 +1,8 @@
-﻿import {AppNavBar} from '../../components/app-navbar.tsx';
-import {Offers} from '../../../types/offer.ts';
-import {FavoriteList} from './components/favorite-list.tsx';
+﻿
+import {Offers} from '../../types/offer.ts';
+import {FavoriteList} from '../../components/favorite-list.tsx';
 import {JSX} from 'react';
+import {AppNavBar} from '../../components/app-navbar.tsx';
 
 type FavoritesPageProps = {
   offers: Offers;

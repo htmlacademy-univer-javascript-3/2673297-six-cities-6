@@ -1,10 +1,10 @@
 ﻿import {JSX, FormEvent, useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {AppDispatch, RootState} from '../../../store';
-import {loginAction} from '../../../store/api-actions';
-import {AuthorizationStatus} from '../../../types/auth-status.ts';
-import {AppRoute} from '../../../const.ts';
+import {AppDispatch, RootState} from '../../store';
+import {loginAction} from '../../store/api-actions.ts';
+import {AuthorizationStatus} from '../../types/auth-status.ts';
+import {AppRoute} from '../../const.ts';
 import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 
 function LoginScreen() : JSX.Element {

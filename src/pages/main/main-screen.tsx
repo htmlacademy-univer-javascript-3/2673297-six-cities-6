@@ -1,15 +1,15 @@
-﻿import Map from './components/map';
+﻿import Map from '../../components/map.tsx';
 import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 import {JSX, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {SortType} from '../../../types/sort-type.ts';
-import {Offer} from '../../../types/offer.ts';
-import {AppDispatch, RootState} from '../../../store';
-import {CityHeader} from './components/city-header.tsx';
-import {SortOptions} from './components/sort-options.tsx';
-import {OfferList} from '../../components/offer-list.tsx';
+import {SortType} from '../../types/sort-type.ts';
+import {Offer} from '../../types/offer.ts';
+import {AppDispatch, RootState} from '../../store';
+import {CityHeader} from '../../components/city-header.tsx';
+import {SortOptions} from '../../components/sort-options.tsx';
+import {selectCity, selectSorting} from '../../store/offers/slice.ts';
 import {AppNavBar} from '../../components/app-navbar.tsx';
-import {selectCity, selectSorting} from '../../../store/offers/slice.ts';
+import {OfferList} from '../../components/offer-list.tsx';
 
 
 function MainScreen(): JSX.Element {
