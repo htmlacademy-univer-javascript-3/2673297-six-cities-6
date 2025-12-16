@@ -1,4 +1,4 @@
-import {Review} from '../../../../types/review.ts';
+import {Review} from '../types/review.ts';
 
 export type ReviewItemProps = {
   review: Review;

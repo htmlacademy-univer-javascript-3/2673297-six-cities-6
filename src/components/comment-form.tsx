@@ -1,9 +1,9 @@
 import {ChangeEvent, FormEvent, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../../../store';
 import {useParams} from 'react-router-dom';
-import {AuthorizationStatus} from '../../../../types/auth-status.ts';
-import {postReviewAction} from '../../../../store/api-actions.ts';
+import {AppDispatch, RootState} from '../store';
+import {AuthorizationStatus} from '../types/auth-status.ts';
+import {postReviewAction} from '../store/api-actions.ts';
 
 export function CommentForm() {
   const [rating, setRating] = useState('0');

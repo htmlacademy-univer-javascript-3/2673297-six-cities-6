@@ -1,9 +1,9 @@
 ﻿import {Navigate} from 'react-router-dom';
-import {AppRoute} from '../../const.ts';
 import {useSelector} from 'react-redux';
-import {AuthorizationStatus} from '../../types/auth-status';
 import {LoadingScreen} from '../pages/loading-screen/loading-screen.tsx';
-import {RootState} from '../../store';
+import {AuthorizationStatus} from '../types/auth-status.ts';
+import {RootState} from '../store';
+import {AppRoute} from '../const.ts';
 
 export function PrivateRoute({children}: {children: JSX.Element}): JSX.Element {
   const authorizationStatus = useSelector<RootState, AuthorizationStatus>(

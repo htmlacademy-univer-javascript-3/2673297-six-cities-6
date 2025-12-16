@@ -1,26 +1,30 @@
-﻿import {fetchOfferDetailsAction} from '../../../store/api-actions.ts';
+﻿import {fetchOfferDetailsAction} from '../../store/api-actions.ts';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate, useParams} from 'react-router-dom';
 import {LoadingScreen} from '../loading-screen/loading-screen.tsx';
 import NotFoundScreen from '../not-found/not-found-screen.tsx';
-import {AppNavBar} from '../../components/app-navbar.tsx';
-import {AppDispatch, RootState} from '../../../store';
-import {Reviews} from '../../../types/review.ts';
-import {Offer, Offers} from '../../../types/offer.ts';
+import {AppDispatch, RootState} from '../../store';
+import {Reviews} from '../../types/review.ts';
+import {Offer, Offers} from '../../types/offer.ts';
 import {JSX, useEffect} from 'react';
-import {OfferGallery} from './components/offer-gallery.tsx';
-import {GoodsList} from './components/goods-list.tsx';
-import {ReviewList} from './components/review-list.tsx';
+import {OfferGallery} from '../../components/offer-gallery.tsx';
+import {GoodsList} from '../../components/goods-list.tsx';
+import {ReviewList} from '../../components/review-list.tsx';
+import Map from '../../components/map.tsx';
+import {AppRoute} from '../../const.ts';
 import {OfferList} from '../../components/offer-list.tsx';
-import Map from '../main/components/map.tsx';
-import {AppRoute} from '../../../const.ts';
+import {AppNavBar} from '../../components/app-navbar.tsx';
 
 
 function OfferScreen() : JSX.Element {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const reviews = useSelector<RootState, Reviews>((state) => state.selectedOffer?.selectedOffer?.reviews ?? []);
-  const offersNearby = useSelector<RootState, Offers>((state) => state.selectedOffer?.selectedOffer?.offersNearby ?? []);
+  const sortedReviews = [...reviews]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 10);
+  const offersNearby = useSelector<RootState, Offers>((state) => state.selectedOffer?.selectedOffer?.offersNearby ?? [])
+    .slice(0, 3);
   const offer = useSelector<RootState, Offer | undefined>((state) => state?.selectedOffer?.selectedOffer?.offer);
   const isOfferLoading = useSelector<RootState, boolean>((state) => state?.selectedOffer.isSelectedOfferLoading);
   const dispatch = useDispatch<AppDispatch>();
@@ -110,14 +114,17 @@ function OfferScreen() : JSX.Element {
                   </p>
                 </div>
               </div>
-              <ReviewList reviews={reviews} />
+              <ReviewList
+                reviews={sortedReviews}
+                count={reviews.length}
+              />
             </div>
           </div>
           <section className="offer__map map">
 
             <Map
               city={offersNearby[0].city}
-              offers={offersNearby}
+              offers={offersNearby.concat(offer)}
               activeOfferId={offer.id}
               className={'offer__map map'}
             />

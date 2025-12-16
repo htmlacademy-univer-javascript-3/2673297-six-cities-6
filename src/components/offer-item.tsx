@@ -1,7 +1,7 @@
-import { AppRoute } from '../../const.ts';
-import { Offer } from '../../types/offer.ts';
 import { Link } from 'react-router-dom';
 import React, { useCallback, useMemo } from 'react';
+import {Offer} from '../types/offer.ts';
+import {AppRoute} from '../const.ts';
 
 export type OfferItemProps = {
   offer: Offer;
